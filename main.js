@@ -7,6 +7,12 @@ const log = require('electron-log');
 // trueにするとブラウザの開発ツールがアプリの画面に表示される
 const isDev = false;
 
+// Macかどうかを判定
+const isMac = process.platform === "darwin"
+
+// Set the application name
+app.name = '画像リサイズ君';
+
 let mainWindow; // Main Window
 
 const createWindow = () => {
@@ -19,7 +25,6 @@ const createWindow = () => {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      preload: path.join(__dirname, 'preload.js'),
     },
   })
   
@@ -34,7 +39,7 @@ const createWindow = () => {
 const createAboutWindow = () => {
   // Create the browser window.
   const aboutWindow = new BrowserWindow({
-    title: 'About 画像リサイズ君',
+    title: '画像リサイズ君について',
     width: 300,
     height: 300,
     icon: `${__dirname}/assets/icons/Icon_256x256.png`,
@@ -46,40 +51,19 @@ const createAboutWindow = () => {
   aboutWindow.loadFile(path.join(__dirname, `about.html`));
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-  createWindow();
-
-  // Add menu
-  const mainMenu = Menu.buildFromTemplate(menu)
-  // Menu.setApplicationMenu(mainMenu)
-  Menu.setApplicationMenu(null)
-
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
-    }
-  });
-});
-
 const menu = [
-  ...(process.platform === 'darwin' ? [{ 
-    label: app.name,
-    submenu: [
-      {
-        label: '画像リサイズ君について',
-        click: createAboutWindow
-      },
-      { type: 'separator' },
-      {
-        role: 'quit', // Include "Quit" for macOS
-        label: app.name + 'を終了'
-      }
-    ]
+  ...(isMac ? [
+    {    
+      label: "",
+    },
+    {
+      label: "ファイル",
+      submenu: [
+        {
+          label: '画像リサイズ君について',
+          click: createAboutWindow
+        },
+      ]
    }] : [{
     label: 'ヘルプ',
     submenu: [
@@ -92,7 +76,35 @@ const menu = [
       }
     ]
    }])
-];
+]
+
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// Some APIs can only be used after this event occurs.
+app.whenReady().then(() => {
+  createWindow();
+
+  // Add menu
+  // if(process.platform === 'darwin') {
+  //   menu.unshift({ 
+  //     label: app.name,
+  //     role: 'appMenu'
+  //    });
+  // }
+
+  const mainMenu = Menu.buildFromTemplate(menu)
+  
+  Menu.setApplicationMenu(mainMenu)
+  // Menu.setApplicationMenu(null)
+
+  // On OS X it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
+});
 
 ipcMain.on('open-file-dialog', (event) => {
   dialog.showOpenDialog({

@@ -1,6 +1,6 @@
 {
   "name": "image-resizer-app",
-  "productName": "Image Resizer",
+  "productName": "画像リサイズ君",
   "version": "0.0.1",
   "description": "A simple image resizer app",
   "main": "main.js",
