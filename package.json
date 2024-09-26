@@ -8,7 +8,7 @@
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "package-mac": "electron-packager . --overwrite --platform=darwin --arch=arm64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
-    "package-win": "electron-packager . --overwrite --asar=false --platform=win32 --arch=x86_64 --icon=assets/icons/win/icon.ico --prune=false --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Image Resizer\"",
+    "package-win": "electron-packager . --overwrite --asar=false --platform=win32 --arch=x64 --icon=assets/icons/win/icon.ico --prune=false --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Image Resizer\"",
     "package-linux": "electron-packager . --overwrite --asar=false --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=false --out=release-builds"
   },
   "author": "dkc",
